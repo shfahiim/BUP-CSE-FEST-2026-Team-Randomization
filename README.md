@@ -4,9 +4,9 @@ GridWise is a deployable HTTP service for the BUP CSE Fest 2026 preliminary chal
 
 ## Technical Walkthrough Video
 
-A concise technical walkthrough demonstrating the problem statement, system architecture, operator-note guardrails, linear optimization guarantees, and live 10/10 test harness execution is included in the repository:
+A concise technical walkthrough demonstrating the problem statement, system architecture, operator-note guardrails, linear optimization guarantees, and live 10/10 test harness execution is available on YouTube:
 
-- [`video/gridwise_walkthrough.mp4`](video/gridwise_walkthrough.mp4) (1080p Full HD, 2m 45s)
+- [GridWise Technical Walkthrough (YouTube)](https://youtu.be/rtTx-xoH3Z4)
 
 ## Architecture
 
@@ -254,5 +254,4 @@ app/
   service.py       end-to-end orchestration and recovery
 tests/              offline deterministic acceptance tests
 harness/            deployed public-case HTTP harness
-video/              technical walkthrough video (MP4)
 ```
