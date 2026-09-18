@@ -2,6 +2,12 @@
 
 GridWise is a deployable HTTP service for the BUP CSE Fest 2026 preliminary challenge. It interprets natural-language operator notes with Gemini, validates the resulting directives deterministically, solves the 24-hour energy schedule as a linear program, and independently replays the serialized response before returning it.
 
+## Technical Walkthrough Video
+
+A concise technical walkthrough demonstrating the problem statement, system architecture, operator-note guardrails, linear optimization guarantees, and live 10/10 test harness execution is included in the repository:
+
+- [`video/gridwise_walkthrough.mp4`](video/gridwise_walkthrough.mp4) (1080p Full HD, 2m 45s)
+
 ## Architecture
 
 ```text
@@ -248,4 +254,5 @@ app/
   service.py       end-to-end orchestration and recovery
 tests/              offline deterministic acceptance tests
 harness/            deployed public-case HTTP harness
+video/              technical walkthrough video (MP4)
 ```
