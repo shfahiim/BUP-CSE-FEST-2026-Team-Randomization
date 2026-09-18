@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+.venv
+__pycache__
+.pytest_cache
+tests
+*.pdf
+BUP_CSE_FEST_2026_Preli_Public_Sample_Cases.json
+reference_check.py
+plan.md
