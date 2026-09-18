@@ -2,7 +2,6 @@ name: Docker
 
 on:
   push:
-    branches: [main]
     tags: ["v*"]
   workflow_dispatch:
 
@@ -29,7 +28,6 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=tag
             type=sha,prefix=sha-
       - name: Build and publish image

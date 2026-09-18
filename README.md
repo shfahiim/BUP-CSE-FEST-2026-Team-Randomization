@@ -124,12 +124,21 @@ python harness/run_samples.py --base-url http://127.0.0.1:8080
 
 The image runs as a non-root user, binds to `0.0.0.0`, exposes port 8080, and contains no credentials. `/health` intentionally does not call Gemini, so the fallback image can demonstrate readiness without a key. `/optimize-energy` requires a runtime key for scored language interpretation.
 
-### GitHub Actions and image release
+### Container image release
 
-Every push and pull request runs the offline acceptance suite. Pushes to `main` also build the image and publish it to:
+The repository's Docker workflow publishes version tags unchanged. The submission image is:
 
 ```text
-ghcr.io/shfahiim/gridwise-bup-cse-fest-2026:latest
+ghcr.io/shfahiim/gridwise-bup-cse-fest-2026:v1.0.0
+```
+
+Once its package visibility is public, organizers can run it with:
+
+```bash
+docker pull ghcr.io/shfahiim/gridwise-bup-cse-fest-2026:v1.0.0
+docker run --rm -p 8080:8080 --env-file .env \
+  ghcr.io/shfahiim/gridwise-bup-cse-fest-2026:v1.0.0
+curl -s http://127.0.0.1:8080/health
 ```
 
 The source repository is intentionally private during development. GitHub Container Registry package visibility is managed separately from repository visibility: before evaluation, make both the repository and the package public, then confirm the image can be pulled from a logged-out shell. For the final submission, prefer an immutable release tag or digest instead of relying only on `latest`.
@@ -185,6 +194,17 @@ An LP can contain simultaneous charge and discharge in a degenerate optimum. The
 - The statement does not define overlapping solar-reduction semantics. This implementation applies the lowest remaining factor in an affected hour and isolates that policy in `app/directives.py`.
 - Battery efficiency is treated as 100% because the official equations specify direct charge/discharge state transitions without an efficiency parameter.
 - The fallback can preserve API and physics validity during provider failure, but it cannot recover hidden interpretation points for a discarded true directive.
+
+## Dependencies and credits
+
+- Google Gemini API — language-model interpretation of operator notes
+- FastAPI, Pydantic, Uvicorn, and HTTPX — HTTP service, schemas, server, and provider client
+- SciPy/HiGHS and NumPy — deterministic linear optimization and numeric handling
+- python-dotenv — local configuration loading
+- pytest — offline acceptance tests
+- Docker and GitHub Container Registry — reproducible fallback packaging
+
+Exact versions are pinned in `requirements.txt` and `requirements-dev.txt`. The application architecture, prompts, guardrails, directive compiler, optimizer integration, replay gate, test harnesses, and recovery behavior are implemented in this repository.
 
 ## Project layout
 
