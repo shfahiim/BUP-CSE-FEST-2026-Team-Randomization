@@ -24,6 +24,34 @@ The LLM participates directly in the path that creates optimizer constraints. It
 - A Gemini API key with quota for the configured model
 - Docker only if using the container workflow
 
+## Hosted API
+
+The evaluation service is publicly reachable at:
+
+```text
+http://161.118.236.136:3001
+```
+
+Verify readiness:
+
+```bash
+curl --fail http://161.118.236.136:3001/health
+```
+
+Expected response:
+
+```json
+{"status":"ok"}
+```
+
+Run all supplied public cases against the hosted service:
+
+```bash
+python harness/run_samples.py --base-url http://161.118.236.136:3001
+```
+
+The hosted service runs directly under Python/Uvicorn as a restart-enabled `systemd` service with one worker. Port 3001 is the public deployment; the Docker image documented below is the required fallback artifact.
+
 ## Configuration
 
 Copy `.env.example` or set these environment variables through the deployment platform:
@@ -124,6 +152,23 @@ python harness/run_samples.py --base-url http://127.0.0.1:8080
 
 The image runs as a non-root user, binds to `0.0.0.0`, exposes port 8080, and contains no credentials. `/health` intentionally does not call Gemini, so the fallback image can demonstrate readiness without a key. `/optimize-energy` requires a runtime key for scored language interpretation.
 
+## VM service operation
+
+The checked-in `deploy/gridwise.service` unit starts the direct VM deployment. On the submitted VM it uses:
+
+- application directory: `/home/ubuntu/gridwise`
+- environment file: `/home/ubuntu/gridwise/.env` with mode `600`
+- Python environment: `/home/ubuntu/gridwise/.venv`
+- process: one Uvicorn worker bound to `0.0.0.0:3001`
+
+Operational checks:
+
+```bash
+sudo systemctl status gridwise.service
+sudo journalctl -u gridwise.service -n 50 --no-pager
+sudo systemctl restart gridwise.service
+```
+
 ### Container image release
 
 The repository's Docker workflow publishes version tags unchanged. The submission image is:
@@ -220,4 +265,5 @@ app/
   service.py       end-to-end orchestration and recovery
 tests/              offline deterministic acceptance tests
 harness/            deployed public-case HTTP harness
+deploy/             production systemd service unit
 ```
