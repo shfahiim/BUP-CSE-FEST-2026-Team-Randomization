@@ -50,7 +50,7 @@ Run all supplied public cases against the hosted service:
 python harness/run_samples.py --base-url http://161.118.236.136:3001
 ```
 
-The hosted service runs directly under Python/Uvicorn as a restart-enabled `systemd` service with one worker. Port 3001 is the public deployment; the Docker image documented below is the required fallback artifact.
+Use this base URL for judging. The separately documented Docker image is the required fallback artifact.
 
 ## Configuration
 
@@ -73,8 +73,8 @@ Never commit `.env` or place a key in the Docker image. The service sends the Ge
 ## Local quickstart
 
 ```bash
-git clone https://github.com/shfahiim/gridwise-bup-cse-fest-2026.git
-cd gridwise-bup-cse-fest-2026
+git clone https://github.com/shfahiim/BUP-CSE-FEST-2026-Team-Randomization.git
+cd BUP-CSE-FEST-2026-Team-Randomization
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-dev.txt
@@ -152,37 +152,20 @@ python harness/run_samples.py --base-url http://127.0.0.1:8080
 
 The image runs as a non-root user, binds to `0.0.0.0`, exposes port 8080, and contains no credentials. `/health` intentionally does not call Gemini, so the fallback image can demonstrate readiness without a key. `/optimize-energy` requires a runtime key for scored language interpretation.
 
-## VM service operation
-
-The checked-in `deploy/gridwise.service` unit starts the direct VM deployment. On the submitted VM it uses:
-
-- application directory: `/home/ubuntu/gridwise`
-- environment file: `/home/ubuntu/gridwise/.env` with mode `600`
-- Python environment: `/home/ubuntu/gridwise/.venv`
-- process: one Uvicorn worker bound to `0.0.0.0:3001`
-
-Operational checks:
-
-```bash
-sudo systemctl status gridwise.service
-sudo journalctl -u gridwise.service -n 50 --no-pager
-sudo systemctl restart gridwise.service
-```
-
 ### Container image release
 
 The repository's Docker workflow publishes version tags unchanged. The submission image is:
 
 ```text
-ghcr.io/shfahiim/gridwise-bup-cse-fest-2026:v1.0.0
+ghcr.io/shfahiim/bup-cse-fest-2026-team-randomization:v1.0.1
 ```
 
 Once its package visibility is public, organizers can run it with:
 
 ```bash
-docker pull ghcr.io/shfahiim/gridwise-bup-cse-fest-2026:v1.0.0
+docker pull ghcr.io/shfahiim/bup-cse-fest-2026-team-randomization:v1.0.1
 docker run --rm -p 8080:8080 --env-file .env \
-  ghcr.io/shfahiim/gridwise-bup-cse-fest-2026:v1.0.0
+  ghcr.io/shfahiim/bup-cse-fest-2026-team-randomization:v1.0.1
 curl -s http://127.0.0.1:8080/health
 ```
 
@@ -265,5 +248,4 @@ app/
   service.py       end-to-end orchestration and recovery
 tests/              offline deterministic acceptance tests
 harness/            deployed public-case HTTP harness
-deploy/             production systemd service unit
 ```

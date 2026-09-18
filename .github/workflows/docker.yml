@@ -26,7 +26,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}
+          # OCI image names must be lowercase even though the repository name is title-cased.
+          images: ghcr.io/shfahiim/bup-cse-fest-2026-team-randomization
           tags: |
             type=ref,event=tag
             type=sha,prefix=sha-
